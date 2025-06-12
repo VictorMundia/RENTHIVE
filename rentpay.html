@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pay Rent - RentHive</title>
+</head>
+<body>
+  <h1>Pay Your Rent</h1>
+  <form action="/api/payments" method="POST">
+    <label>Amount:</label>
+    <input type="number" name="amount" required><br>
+    <label>Payment Method:</label>
+    <select name="method">
+      <option value="momo">Mobile Money</option>
+      <option value="card">Credit Card</option>
+    </select><br>
+    <button type="submit">Pay Now</button>
+  </form>
+</body>
+</html>
