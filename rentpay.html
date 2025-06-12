@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pay Rent - RentHive</title>
 </head>
 <body>
   <h1>Pay Your Rent</h1>
   <form action="/api/payments" method="POST">
     <label>Amount:</label>
-    <input type="number" name="amount" required><br>
-    <label>Payment Method:</label>
-    <select name="method">
+    <input type="number" name="amount" required placeholder="Enter amount" title="Enter the rent amount"><br>
+    <label for="payment-method">Payment Method:</label>
+    <select name="method" id="payment-method">
       <option value="momo">Mobile Money</option>
       <option value="card">Credit Card</option>
     </select><br>

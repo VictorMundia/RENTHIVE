@@ -1,17 +1,17 @@
-<!-- complaint_form.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Submit Complaint - RentHive</title>
 </head>
 <body>
   <h1>Submit a Complaint</h1>
   <form action="/api/complaints" method="POST">
     <label>Subject:</label>
-    <input type="text" name="subject" required><br>
+    <input type="text" name="subject" required placeholder="Enter the subject" title="Subject"><br>
     <label>Description:</label><br>
-    <textarea name="description" rows="4" cols="40"></textarea><br>
+    <textarea name="description" rows="4" cols="40" title="Description" placeholder="Enter the description"></textarea><br>
     <button type="submit">Submit</button>
   </form>
 </body>
