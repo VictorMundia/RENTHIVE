@@ -3,7 +3,7 @@ from django.db import models
 
 from django.db import models
 
-class propertyowner(models.Model):
+class PropertyOwner(models.Model):
     full_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
