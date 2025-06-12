@@ -8,6 +8,7 @@ class Tenant(models.Model):
     email = models.EmailField()
     national_id = models.CharField(max_length=20, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    property = models.OneToOneField('Property', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
