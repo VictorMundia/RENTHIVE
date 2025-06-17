@@ -4,6 +4,7 @@ from django.db import models
 from django.db import models
 from django.utils import timezone
 from user.models import User
+from django.contrib.contenttypes.models import ContentType
 
 class Notification(models.Model):
     """
