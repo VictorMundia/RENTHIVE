@@ -1,12 +1,17 @@
 from django.db import models
 
+from django.db import models
+from user.models import User
+from propertytype.models import PropertyType
+
 class Property(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    address = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='properties', limit_choices_to={'role': 'OWNER'})
+    property_type = models.ForeignKey(PropertyType, on_delete=models.PROTECT)
+    name = models.CharField(max_length=100)
+    location = models.JSONField()  # {county: "", coordinates: {lat, lng}}
+    amenities = models.JSONField(default=list)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return f"{self.name} - {self.property_type.name}"
