@@ -1,2 +1,4 @@
 from django.contrib import admin
-# ...existing code...
+from .models import Message
+
+admin.site.register(Message)

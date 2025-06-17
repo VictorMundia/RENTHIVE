@@ -42,7 +42,12 @@ INSTALLED_APPS = [
     'user',
     'messaging',
     'propertytype',
-    'rentalproperty',
+    'properties',
+    'maintenanceticket',
+    'payments',
+    'unit',
+    'notifications.apps.NotificationsConfig',
+
 ]
 
 MIDDLEWARE = [
