@@ -48,10 +48,12 @@ INSTALLED_APPS = [
     'unit',
     'notifications.apps.NotificationsConfig',
     'receipt',
+    'corsheaders',
 
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -144,3 +146,18 @@ REST_FRAMEWORK = {
     ),
     # You can add other DRF settings here
 }
+
+# Enable CORS for all origins (development only)
+CORS_ALLOW_ALL_ORIGINS = True
+# For production, use CORS_ALLOWED_ORIGINS instead
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+# ]
+
+# MPESA API settings (replace with your real credentials)
+MPESA_CONSUMER_KEY = 'frULANmr80IGmSDNabqk3BSc9pgKRjIOVQretkiupbIfaHJ9'
+MPESA_CONSUMER_SECRET = 'cu7k2tPAUvWPG2CuNasUXylxjTA9x4rUMY8yHzhrI9cumrBZhoAG6KLv9RAtSB65'
+MPESA_SHORTCODE = 'N/A'
+MPESA_PASSKEY = 'mundia'
+MPESA_ENV = 'sandbox'  # or 'production'
