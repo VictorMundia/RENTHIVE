@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Payment
 from .serializers import PaymentSerializer
 from rest_framework.views import APIView
@@ -17,6 +18,9 @@ import requests
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['status', 'method', 'user']
+    search_fields = ['transaction_id', 'reference']
 
 class MpesaStkPushView(APIView):
     def post(self, request):
