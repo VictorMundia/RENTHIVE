@@ -1,1 +1,13 @@
-<!-- index.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to RentHive</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <h1>Welcome to RentHive</h1>
+  <p>A modern tenant management system.</p>
+  <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a>
+</body>
+</html>
