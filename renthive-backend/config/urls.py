@@ -20,10 +20,25 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from ..views import home
+from views import (
+    home, login_view, register_view, dashboard_view, properties_view, property_detail_view,
+    tenants_view, leases_view, payments_view, maintenance_view, messages_view, notifications_view, profile_view
+)
 
 urlpatterns = [
     path('', home, name='home'),
+    path('login/', login_view, name='login'),
+    path('register/', register_view, name='register'),
+    path('dashboard/', dashboard_view, name='dashboard'),
+    path('properties/', properties_view, name='properties'),
+    path('properties/<int:id>/', property_detail_view, name='property_detail'),
+    path('tenants/', tenants_view, name='tenants'),
+    path('leases/', leases_view, name='leases'),
+    path('payments/', payments_view, name='payments'),
+    path('maintenance/', maintenance_view, name='maintenance'),
+    path('messages/', messages_view, name='messages'),
+    path('notifications/', notifications_view, name='notifications'),
+    path('profile/', profile_view, name='profile'),
     path('admin/', admin.site.urls),
     path('api/', include('properties.urls')),
     path('api/', include('leases.urls')),
