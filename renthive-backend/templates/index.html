@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,35 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RentHive</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#FFD600',
+              black: '#000',
+              gray: {
+                100: '#f3f4f6',
+                700: '#374151',
+                800: '#1f2937',
+              },
+            },
+          },
+        },
+      }
+    </script>
   </head>
-  <body class="flex flex-col min-h-screen bg-white text-gray-900">
+  <body class="flex flex-col min-h-screen bg-primary/10">
     <!-- Header -->
-    <header class="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div class="container mx-auto flex h-14 items-center max-w-screen-2xl px-4">
-        <div class="mr-4 hidden md:flex">
-          <a href="#" class="mr-6 flex items-center space-x-2">
-            <i class="ph ph-hexagon text-blue-600 text-2xl"></i>
-            <span class="hidden font-bold sm:inline-block text-xl">RentHive</span>
-          </a>
-          <nav class="flex items-center gap-4 text-sm lg:gap-6">
-            <a href="#features" class="hover:text-blue-600 transition">Features</a>
-            <a href="#benefits" class="hover:text-blue-600 transition">Benefits</a>
-          </nav>
-        </div>
-        <div class="flex flex-1 items-center justify-end space-x-2">
-          <a href="#login" class="px-4 py-2 text-sm rounded hover:bg-gray-100">Login</a>
-          <a href="#signup" class="px-4 py-2 bg-black text-white text-sm rounded hover:bg-gray-800">Sign Up</a>
+    <nav class="bg-black shadow mb-8">
+      <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="/" class="flex items-center space-x-2">
+          <img src="{% static 'img/logo.png' %}" alt="RentHive Logo" class="h-10 w-10 object-contain" />
+          <span class="text-xl font-bold text-white">RentHive</span>
+        </a>
+        <div class="space-x-4">
+          <a href="{% url 'home' %}" class="text-white hover:text-primary">Home</a>
+          <a href="{% url 'login' %}" class="text-white hover:text-primary">Login</a>
+          <a href="{% url 'register' %}" class="text-black font-semibold bg-white px-3 py-1 rounded hover:bg-primary hover:text-black transition">Sign Up</a>
         </div>
       </div>
-    </header>
+    </nav>
 
     <!-- Hero Section -->
     <section class="py-20 text-center bg-gray-100" x-data="{ show: false }" x-intersect.once="show = true">
       <div class="container mx-auto px-4" x-show="show" x-transition>
         <h1 class="text-4xl font-bold sm:text-5xl md:text-6xl">
-          Manage Your Rentals, <span class="text-blue-600">Seamlessly</span>.
+          Manage Your Rentals, <span class="text-yellow-500">Seamlessly</span>.
         </h1>
         <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-600 sm:text-xl md:text-2xl">
           RentHive simplifies rental management for small property owners in Kenya.
@@ -50,7 +61,7 @@
       <div class="container mx-auto px-4">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold sm:text-4xl md:text-5xl">
-            Why Choose <span class="text-blue-600">RentHive</span>?
+            Why Choose <span class="text-yellow-500">RentHive</span>?
           </h2>
           <p class="mt-4 max-w-xl mx-auto text-lg text-gray-600">
             Everything you need to manage your properties efficiently.
@@ -86,14 +97,14 @@
     <section id="benefits" class="py-20 bg-gray-100">
       <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl font-bold sm:text-4xl md:text-5xl">
-          Benefits for <span class="text-blue-600">Everyone</span>
+          Benefits for <span class="text-yellow-500">Everyone</span>
         </h2>
         <p class="mt-4 max-w-xl mx-auto text-lg text-gray-600 mb-12">
           Designed to make life easier for owners and tenants.
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
           <div class="p-6 border rounded-lg shadow-sm bg-white">
-            <h3 class="text-xl font-semibold mb-2 text-blue-600">For Property Owners</h3>
+            <h3 class="text-xl font-semibold mb-2 text-yellow-500">For Property Owners</h3>
             <ul class="list-disc list-inside space-y-1 text-gray-600">
               <li>Save time with automation</li>
               <li>Better tenant relationships</li>
@@ -102,7 +113,7 @@
             </ul>
           </div>
           <div class="p-6 border rounded-lg shadow-sm bg-white">
-            <h3 class="text-xl font-semibold mb-2 text-blue-600">For Tenants</h3>
+            <h3 class="text-xl font-semibold mb-2 text-yellow-500">For Tenants</h3>
             <ul class="list-disc list-inside space-y-1 text-gray-600">
               <li>Pay rent on time</li>
               <li>Easy maintenance reports</li>
@@ -118,7 +129,7 @@
     <section class="py-20">
       <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl font-bold sm:text-4xl md:text-5xl">
-          Ready to <span class="text-blue-600">Simplify</span> Your Rentals?
+          Ready to <span class="text-yellow-500">Simplify</span> Your Rentals?
         </h2>
         <p class="mt-4 max-w-xl mx-auto text-lg text-gray-600">
           Join RentHive and experience modern property management.
