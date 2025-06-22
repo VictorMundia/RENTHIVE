@@ -1,0 +1,85 @@
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+h1, h2 {
+  color: #2f3e46;
+  text-align: center;
+  margin-top: 2rem;
+}
+.container, form, .card {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+input, textarea, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+button {
+  background-color: #3d5a80;
+  color: white;
+  border: none;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #2f3e46;
+}
+a {
+  color: #3d5a80;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+ul li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  margin: 1rem auto;
+  padding: 1.5rem;
+  border-radius: 6px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.table th,
+.table td {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+.notice {
+  padding: 1rem;
+  background-color: #fffae6;
+  border-left: 5px solid #f0c000;
+  margin-top: 1rem;
+  border-radius: 5px;
+}

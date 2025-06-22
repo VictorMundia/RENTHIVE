@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - RentHive</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <h1>Welcome, {{ user.username }}</h1>
+  <ul>
+    <li><a href="{% url 'profile' %}">My Profile</a></li>
+    <li><a href="{% url 'properties' %}">View Properties</a></li>
+    <li><a href="{% url 'payments' %}">Rent Payments</a></li>
+    <li><a href="{% url 'maintenance' %}">Report Maintenance</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+  </ul>
+</body>
+</html>
