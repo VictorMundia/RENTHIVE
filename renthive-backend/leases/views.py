@@ -8,7 +8,7 @@ class LeaseViewSet(viewsets.ModelViewSet):
     queryset = Lease.objects.all()
     serializer_class = LeaseSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['unit', 'tenant', 'status']
+    filterset_fields = ['unit', 'tenant', 'is_active']
     search_fields = ['unit__name', 'tenant__email']
 
 # Create your views here.
