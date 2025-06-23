@@ -22,7 +22,8 @@ from rest_framework_simplejwt.views import (
 )
 from views import (
     home, login_view, register_view, dashboard_view, properties_view, property_detail_view,
-    tenants_view, leases_view, payments_view, maintenance_view, messages_view, notifications_view, profile_view
+    tenants_view, leases_view, payments_view, maintenance_view, messages_view, notifications_view, profile_view,
+    proof_of_ownership_view
 )
 
 urlpatterns = [
@@ -52,4 +53,6 @@ urlpatterns = [
     path('api/', include('maintenanceticket.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('proof-of-ownership/', proof_of_ownership_view, name='proof_of_ownership'),
+    path('api/', include('user.api_urls')),
 ]
