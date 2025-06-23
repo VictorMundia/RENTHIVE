@@ -4,6 +4,12 @@ from django.db import models
 from user.models import User
 from propertytype.models import PropertyType
 
+class ProofOfOwnership(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    document = models.FileField(upload_to='ownership_proofs/')
+    description = models.TextField(blank=True)
+    status = models.CharField(max_length=20, default='Pending Verification')
+
 class Property(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='properties', limit_choices_to={'role': 'OWNER'})
     property_type = models.ForeignKey(PropertyType, on_delete=models.PROTECT)

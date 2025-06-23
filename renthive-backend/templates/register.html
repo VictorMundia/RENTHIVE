@@ -1,122 +1,135 @@
-{% load static %}
-<!-- Signup Page -->
+<!-- filepath: c:\Users\macha\OneDrive\Documents\GitHub\RentHive\renthive-backend\templates\register.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up - RentHive</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#FFD600', // Yellow
-            black: '#000',
-            gray: {
-              100: '#f3f4f6',
-              700: '#374151',
-              800: '#1f2937',
-            },
-          },
-        },
-      },
+  <meta charset="UTF-8">
+  <title>Register - Role Selection</title>
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f8fafc;
+      font-family: 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-  </script>
+    .register-container {
+      background: #fff;
+      padding: 2.5rem 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      max-width: 400px;
+      width: 100%;
+    }
+    .register-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    label {
+      color: #1e293b;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    select, input[type="text"], input[type="email"], input[type="password"] {
+      background: #f1f5f9;
+      border: 1.5px solid #facc15;
+      color: #1e293b;
+      font-size: 1rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      width: 100%;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      transition: border 0.2s;
+    }
+    select:focus, input:focus {
+      outline: none;
+      border-color: #eab308;
+      box-shadow: 0 0 0 2px #fde68a;
+    }
+    #continue-btn, button[type="submit"] {
+      margin-top: 1.5rem;
+      background: #fde047;
+      color: #1e293b;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(250, 204, 21, 0.08);
+      width: 100%;
+    }
+    #continue-btn:hover, button[type="submit"]:hover {
+      background: #facc15;
+      color: #111827;
+    }
+    .hidden {
+      display: none;
+    }
+    ul {
+      margin-top: 18px;
+      padding-left: 18px;
+      color: #e74c3c;
+    }
+    li {
+      font-size: 14px;
+    }
+  </style>
 </head>
-<body class="flex flex-col min-h-screen bg-primary/10">
-  <nav class="bg-black shadow mb-8">
-    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="/" class="flex items-center space-x-2">
-        <img src="{% static 'img/logo.png' %}" alt="RentHive Logo" class="h-8 w-8 object-contain" />
-        <span class="text-xl font-bold text-white">RentHive</span>
-      </a>
-      <div class="space-x-4">
-        <a href="{% url 'home' %}" class="text-white hover:text-primary">Home</a>
-        <a href="{% url 'login' %}" class="text-white hover:text-primary">Login</a>
-        <a href="{% url 'register' %}" class="text-black font-semibold bg-white px-3 py-1 rounded hover:bg-primary hover:text-black transition">Sign Up</a>
-      </div>
-    </div>
-  </nav>
-  <div class="flex flex-1 items-center justify-center">
-    <div class="w-full max-w-md bg-white p-8 rounded shadow border border-primary">
-      <h2 class="text-2xl font-bold text-center mb-6 text-black">Create an Account</h2>
-      <!-- Step 1: Role Selection -->
-      <form id="role-form" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-black">Are you a property owner?</label>
-          <select id="role-select" name="role" required class="w-full px-3 py-2 border rounded mt-1 border-primary focus:ring-primary focus:border-primary">
-            <option value="">Select...</option>
-            <option value="OWNER">Yes, I am a property owner</option>
-            <option value="TENANT">No, I am a tenant</option>
-          </select>
-        </div>
-        <button type="button" id="continue-btn" class="w-full bg-primary text-black py-2 rounded hover:bg-yellow-400 hover:text-black font-semibold transition">Continue</button>
-      </form>
-      <!-- Step 2: Registration Form (hidden by default) -->
-      <form id="register-form" action="{% url 'register' %}" method="POST" enctype="multipart/form-data" class="space-y-4 hidden">
-        {% csrf_token %}
-        <input type="hidden" name="role" id="hidden-role" />
-        <div>
-          <label class="block text-sm font-medium text-black">Username</label>
-          <input type="text" name="username" required class="w-full px-3 py-2 border rounded mt-1 border-primary focus:ring-primary focus:border-primary" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-black">Email</label>
-          <input type="email" name="email" required class="w-full px-3 py-2 border rounded mt-1 border-primary focus:ring-primary focus:border-primary" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-black">Password</label>
-          <input type="password" name="password" required class="w-full px-3 py-2 border rounded mt-1 border-primary focus:ring-primary focus:border-primary" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-black">Confirm Password</label>
-          <input type="password" name="confirm_password" required class="w-full px-3 py-2 border rounded mt-1 border-primary focus:ring-primary focus:border-primary" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-black">Phone</label>
-          <input type="text" name="phone" required class="w-full px-3 py-2 border rounded mt-1 border-primary focus:ring-primary focus:border-primary" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-black">National ID</label>
-          <input type="text" name="national_id" class="w-full px-3 py-2 border rounded mt-1 border-primary focus:ring-primary focus:border-primary" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-black">Profile Picture</label>
-          <input type="file" name="profile_picture" accept="image/*" class="w-full px-3 py-2 border rounded mt-1 border-primary focus:ring-primary focus:border-primary" />
-        </div>
-        <button type="submit" class="w-full bg-black text-primary py-2 rounded hover:bg-yellow-400 hover:text-black font-semibold transition">Sign Up</button>
-      </form>
-      {% if messages and request.method == 'POST' %}
-        <ul class="mb-4">
-          {% for message in messages %}
-            <li class="text-red-600">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-      <p class="mt-4 text-sm text-center text-black">
-        Already have an account?
-        <a href="{% url 'login' %}" class="text-primary hover:underline">Login</a>
-      </p>
-      <script>
-        const roleForm = document.getElementById('role-form');
-        const registerForm = document.getElementById('register-form');
-        const continueBtn = document.getElementById('continue-btn');
-        const roleSelect = document.getElementById('role-select');
-        const hiddenRole = document.getElementById('hidden-role');
-        continueBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          if (roleSelect.value) {
-            hiddenRole.value = roleSelect.value;
-            roleForm.classList.add('hidden');
-            registerForm.classList.remove('hidden');
-          } else {
-            alert('Please select your role to continue.');
-          }
-        });
-      </script>
-    </div>
+<body>
+  <div class="register-container">
+    <div class="register-title">Register</div>
+    <!-- Step 1: Role Selection -->
+    <form id="role-form">
+      <label class="block text-sm font-medium text-black">Are you a property owner?</label>
+      <select id="role-select" name="role" required>
+        <option value="">Select...</option>
+        <option value="OWNER">Yes, I am a property owner</option>
+        <option value="TENANT">No, I am a tenant</option>
+      </select>
+      <button type="button" id="continue-btn">Continue</button>
+    </form>
+    <!-- Step 2: Owner Registration (hidden by default) -->
+    <form id="owner-register-form" class="hidden" action="{% url 'register' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="role" value="OWNER">
+      <label>Name</label>
+      <input type="text" name="username" required>
+      <label>Email</label>
+      <input type="email" name="email" required>
+      <label>Phone</label>
+      <input type="text" name="phone" required>
+      <label>Password</label>
+      <input type="password" name="password" required>
+      <button type="submit">Create Account</button>
+    </form>
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </div>
+  <script>
+    document.getElementById('continue-btn').onclick = function() {
+      var role = document.getElementById('role-select').value;
+      if (role === "OWNER") {
+        document.getElementById('role-form').classList.add('hidden');
+        document.getElementById('owner-register-form').classList.remove('hidden');
+      } else if (role === "TENANT") {
+        window.location.href = "{% url 'tenant_register' %}";
+      } else {
+        alert("Please select your role to continue.");
+      }
+    };
+  </script>
 </body>
 </html>

@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tenant Registration</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f8fafc;
+            font-family: 'Inter', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .register-container {
+            background: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            max-width: 400px;
+            width: 100%;
+        }
+        .register-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        label {
+            color: #1e293b;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            background: #f1f5f9;
+            border: 1.5px solid #facc15;
+            color: #1e293b;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            margin-bottom: 1rem;
+            transition: border 0.2s;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #eab308;
+            box-shadow: 0 0 0 2px #fde68a;
+        }
+        button[type="submit"] {
+            margin-top: 1rem;
+            background: #fde047;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(250, 204, 21, 0.08);
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background: #facc15;
+            color: #111827;
+        }
+        ul {
+            margin-top: 18px;
+            padding-left: 18px;
+            color: #e74c3c;
+        }
+        li {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-title">Tenant Registration</div>
+        <form action="{% url 'tenant_register' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="role" value="TENANT">
+            <label>Name</label>
+            <input type="text" name="username" required>
+            <label>Email</label>
+            <input type="email" name="email" required>
+            <label>Phone</label>
+            <input type="text" name="phone" required>
+            <label>Password</label>
+            <input type="password" name="password" required>
+            <button type="submit">Create Account</button>
+        </form>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>

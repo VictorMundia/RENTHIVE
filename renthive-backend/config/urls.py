@@ -21,9 +21,10 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from views import (
-    home, login_view, register_view, dashboard_view, properties_view, property_detail_view,
+    home, login_view, register_view, dashboard_view, #properties_view,
+      property_detail_view,
     tenants_view, leases_view, payments_view, maintenance_view, messages_view, notifications_view, profile_view,
-    proof_of_ownership_view
+    proof_of_ownership_view, add_property_view, tenant_register_view
 )
 
 urlpatterns = [
@@ -31,7 +32,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
     path('dashboard/', dashboard_view, name='dashboard'),
-    path('properties/', properties_view, name='properties'),
+    #path('properties/', properties_view, name='properties'),
     path('properties/<int:id>/', property_detail_view, name='property_detail'),
     path('tenants/', tenants_view, name='tenants'),
     path('leases/', leases_view, name='leases'),
@@ -54,5 +55,18 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('proof-of-ownership/', proof_of_ownership_view, name='proof_of_ownership'),
+    path('add-property/', add_property_view, name='add_property'),
     path('api/', include('user.api_urls')),
+    path('tenant-register/', tenant_register_view, name='tenant_register'),
+]
+
+urlpatterns += [
+    path('property/<int:property_id>/', property_detail_view, name='property_detail'),
+    path('tenants/', tenants_view, name='tenants'),
+    path('leases/', leases_view, name='leases'),
+    path('payments/', payments_view, name='payments'),
+    path('maintenance/', maintenance_view, name='maintenance'),
+    path('messages/', messages_view, name='messages'),
+    path('notifications/', notifications_view, name='notifications'),
+    path('profile/', profile_view, name='profile'),
 ]

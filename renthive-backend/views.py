@@ -1,15 +1,62 @@
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
-from user.models import User
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
-from django.urls import reverse
-from properties.models import Property
-from properties.forms import PropertyForm
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required
+from user.models import User
+from properties.models import Property, ProofOfOwnership
 
-def home(request):
-    return render(request, 'index.html')
+def register_view(request):
+    if request.method == 'POST':
+        role = request.POST.get('role')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        password = request.POST.get('password')
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
+        elif User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+        else:
+            user = User.objects.create(
+                username=username,
+                email=email,
+                phone=phone,
+                role=role,
+                password=make_password(password),
+                is_active=True
+            )
+            if role == "OWNER":
+                login(request, user)
+                return redirect('proof_of_ownership')
+            else:
+                messages.success(request, "Account created! Please log in.")
+                return redirect('login')
+    return render(request, 'register.html')
+
+def tenant_register_view(request):
+    if request.method == 'POST':
+        role = 'TENANT'
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        password = request.POST.get('password')
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
+        elif User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+        else:
+            User.objects.create(
+                username=username,
+                email=email,
+                phone=phone,
+                role=role,
+                password=make_password(password),
+                is_active=True
+            )
+            messages.success(request, "Account created! Please log in.")
+            return redirect('login')
+    return render(request, 'tenant_register.html')
 
 def login_view(request):
     if request.method == 'POST':
@@ -18,102 +65,90 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect(reverse('dashboard'))
+            return redirect('dashboard')
         else:
-            messages.error(request, 'Invalid username or password.')
+            messages.error(request, "Invalid username or password.")
     return render(request, 'login.html')
 
+@login_required
+def proof_of_ownership_view(request):
+    if request.method == 'POST':
+        document = request.FILES.get('ownership_proof')
+        description = request.POST.get('description', '')
+        ProofOfOwnership.objects.create(
+            user=request.user,
+            document=document,
+            description=description,
+            status='Pending Verification'
+        )
+        messages.success(request, "Proof submitted. Pending verification.")
+        return redirect('dashboard')
+    return render(request, 'proof_of_ownership.html')
+
+@login_required
 def dashboard_view(request):
-    properties = []
-    form = None
-    if request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'OWNER':
+    properties = None
+    if request.user.role == 'OWNER':
+        proof = ProofOfOwnership.objects.filter(user=request.user).order_by('-id').first()
+        if not proof or proof.status != 'Verified':
+            return redirect('proof_of_ownership')
         properties = Property.objects.filter(owner=request.user)
-        if request.method == 'POST':
-            form = PropertyForm(request.POST)
-            if form.is_valid():
-                prop = form.save(commit=False)
-                prop.owner = request.user
-                prop.save()
-                messages.success(request, 'Property added successfully!')
-                return redirect('dashboard')
-        else:
-            form = PropertyForm()
-    context = {
-        'properties': properties,
-        'form': form,
-    }
-    return render(request, 'dashboard.html', context)
+    elif request.user.role == 'TENANT':
+        # You can customize tenant dashboard logic here
+        pass
+    return render(request, 'dashboard.html', {'properties': properties})
 
-def properties_view(request):
-    return render(request, 'properties.html')
+@login_required
+def add_property_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        location = request.POST.get('location')
+        unit_count = request.POST.get('unit_count')
+        rent_amount = request.POST.get('rent_amount')
+        Property.objects.create(
+            owner=request.user,
+            name=name,
+            location=location,
+            unit_count=unit_count,
+            rent_amount=rent_amount
+        )
+        messages.success(request, "Property added!")
+        return redirect('dashboard')
+    return render(request, 'add_property.html')
 
-def property_detail_view(request):
-    return render(request, 'property_detail.html')
+def home(request):
+    return render(request, 'home.html')
 
+@login_required
+def property_detail_view(request, property_id):
+    # Fetch property details by ID
+    # property = Property.objects.get(id=property_id)
+    return render(request, 'property_detail.html')  # Add context as needed
+
+@login_required
 def tenants_view(request):
     return render(request, 'tenants.html')
 
+@login_required
 def leases_view(request):
     return render(request, 'leases.html')
 
+@login_required
 def payments_view(request):
     return render(request, 'payments.html')
 
+@login_required
 def maintenance_view(request):
     return render(request, 'maintenance.html')
 
+@login_required
 def messages_view(request):
     return render(request, 'messages.html')
 
+@login_required
 def notifications_view(request):
     return render(request, 'notifications.html')
 
+@login_required
 def profile_view(request):
     return render(request, 'profile.html')
-
-@csrf_protect
-def proof_of_ownership_view(request):
-    return render(request, 'proof_of_ownership.html')
-
-def register_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-        role = request.POST.get('role')
-        phone = request.POST.get('phone')
-        national_id = request.POST.get('national_id')
-        profile_picture = request.FILES.get('profile_picture')
-        # Validation
-        if not all([username, email, password, confirm_password, role, phone]):
-            messages.error(request, 'All required fields must be filled.')
-            return render(request, 'register.html')
-        if password != confirm_password:
-            messages.error(request, 'Passwords do not match.')
-            return render(request, 'register.html')
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already exists.')
-            return render(request, 'register.html')
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'Username already exists.')
-            return render(request, 'register.html')
-        if User.objects.filter(phone=phone).exists():
-            messages.error(request, 'Phone number already exists.')
-            return render(request, 'register.html')
-        user = User.objects.create(
-            username=username,
-            email=email,
-            role=role,
-            phone=phone,
-            national_id=national_id,
-            profile_picture=profile_picture,
-            password=make_password(password),
-        )
-        if role == 'OWNER':
-            messages.success(request, 'Registration successful! Please provide proof of property ownership.')
-            return redirect('proof_of_ownership')
-        else:
-            messages.success(request, 'Registration successful! You can now log in.')
-            return redirect('login')
-    return render(request, 'register.html')
