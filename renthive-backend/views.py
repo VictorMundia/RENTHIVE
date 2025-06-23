@@ -117,7 +117,10 @@ def add_property_view(request):
     return render(request, 'add_property.html')
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'index.html')
+
+def index(request):
+    return render(request, 'index.html')
 
 @login_required
 def property_detail_view(request, property_id):
