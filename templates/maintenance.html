@@ -1,1 +1,43 @@
 <!-- maintenance.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Maintenance</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Maintenance Requests</h1>
+        <p>Manage your maintenance requests below:</p>
+
+        {% if requests %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Date Reported</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                        <tr>
+                            <td>{{ request.property.name }}</td>
+                            <td>{{ request.description }}</td>
+                            <td>{{ request.status }}</td>
+                            <td>{{ request.date_reported }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No maintenance requests found.</p>
+        {% endif %}
+        <a href="{% url 'create_maintenance_request' %}" class="btn">Create New Request</a>
+    </div>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
