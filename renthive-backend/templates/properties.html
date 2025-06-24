@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Properties - RentHive</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FFD600',
+            black: '#000',
+            gray: {
+              100: '#f3f4f6',
+              700: '#374151',
+              800: '#1f2937',
+            },
+          },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="flex flex-col min-h-screen bg-primary/10">
+  <nav class="bg-black shadow mb-8">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/" class="flex items-center space-x-2">
+        <img src="{% static 'img/logo.png' %}" alt="RentHive Logo" class="h-8 w-8 object-contain" />
+        <span class="text-xl font-bold text-white">RentHive</span>
+      </a>
+      <div class="space-x-4">
+        <a href="{% url 'home' %}" class="text-white hover:text-primary">Home</a>
+        <a href="{% url 'login' %}" class="text-white hover:text-primary">Login</a>
+        <a href="{% url 'register' %}" class="text-black font-semibold bg-white px-3 py-1 rounded hover:bg-primary hover:text-black transition">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+  <h1>Properties</h1>
+  <!-- Property list will go here -->
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

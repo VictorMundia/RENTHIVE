@@ -1,0 +1,32 @@
+<main class="flex-1 max-w-4xl mx-auto px-4">
+  <h1 class="text-3xl font-bold text-black mb-8 text-center">Welcome to your Dashboard</h1>
+  <h2 class="text-xl font-semibold mb-6 text-black text-center">Welcome, {{ user.username }}</h2>
+  {% if user.is_authenticated and user.role == 'OWNER' %}
+    {% if properties and properties.count > 0 %}
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4 text-black">Your Properties</h2>
+        <ul class="mb-4">
+          {% for property in properties %}
+            <li class="mb-2 p-4 bg-white border border-primary rounded shadow">
+              <span class="font-bold">{{ property.name }}</span> - {{ property.location }} - Units: {{ property.unit_count }} - Rent: {{ property.rent_amount }}
+            </li>
+          {% endfor %}
+        </ul>
+        <a href="{% url 'add_property' %}" class="bg-primary text-black px-4 py-2 rounded hover:bg-yellow-400 font-semibold transition">Add Another Property</a>
+      </div>
+    {% else %}
+      <div class="mb-8">
+        <p class="text-gray-700 mb-4">Start by adding your first property:</p>
+        <a href="{% url 'add_property' %}" class="bg-primary text-black px-4 py-2 rounded hover:bg-yellow-400 font-semibold transition">Add Property</a>
+      </div>
+    {% endif %}
+    {% if messages %}
+      <ul class="mb-4">
+        {% for message in messages %}
+          <li class="text-green-700">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endif %}
+  <!-- ...rest of your dashboard cards... -->
+</main>
