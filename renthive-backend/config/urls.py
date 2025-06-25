@@ -58,6 +58,7 @@ urlpatterns = [
     path('add-property/', add_property_view, name='add_property'),
     path('api/', include('user.api_urls')),
     path('tenant-register/', tenant_register_view, name='tenant_register'),
+    path('profile/', profile_view, name='profile')
 ]
 
 urlpatterns += [

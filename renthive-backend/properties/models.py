@@ -1,6 +1,7 @@
 from django.db import models
 
 from django.db import models
+from django.conf import settings
 from user.models import User
 from propertytype.models import PropertyType
 
@@ -11,12 +12,12 @@ class ProofOfOwnership(models.Model):
     status = models.CharField(max_length=20, default='Pending Verification')
 
 class Property(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='properties', limit_choices_to={'role': 'OWNER'})
-    property_type = models.ForeignKey(PropertyType, on_delete=models.PROTECT)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='properties')
     name = models.CharField(max_length=100)
-    location = models.JSONField()  # {county: "", coordinates: {lat, lng}}
-    amenities = models.JSONField(default=list)
-    is_active = models.BooleanField(default=True)
+    location = models.CharField(max_length=255)
+    unit_count = models.PositiveIntegerField(default=1)  # <-- Make sure this exists
+    rent_amount = models.DecimalField(max_digits=10, decimal_places=2,default=0)  # <-- And this
+    description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

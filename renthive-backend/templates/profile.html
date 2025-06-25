@@ -1,47 +1,137 @@
+<!-- filepath: c:\Users\macha\OneDrive\Documents\GitHub\RENTHIVE\renthive-backend\templates\profile.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profile - RentHive</title>
+  <meta charset="UTF-8">
+  <title>My Profile | RentHive</title>
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#FFD600',
-            black: '#000',
-            gray: {
-              100: '#f3f4f6',
-              700: '#374151',
-              800: '#1f2937',
-            },
-          },
-        },
-      },
-    }
-  </script>
 </head>
-<body class="flex flex-col min-h-screen bg-primary/10">
+<body class="bg-gray-50 min-h-screen font-sans">
+  <!-- Navbar -->
   <nav class="bg-black shadow mb-8">
-    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="/" class="flex items-center space-x-2">
-        <img src="{% static 'img/logo.png' %}" alt="RentHive Logo" class="h-8 w-8 object-contain" />
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="{% url 'home' %}" class="flex items-center space-x-2">
+        <img src="{% static 'img/logo.png' %}" alt="RentHive Logo" class="h-10 w-10 object-contain" />
         <span class="text-xl font-bold text-white">RentHive</span>
       </a>
       <div class="space-x-4">
-        <a href="{% url 'home' %}" class="text-white hover:text-primary">Home</a>
-        <a href="{% url 'login' %}" class="text-white hover:text-primary">Login</a>
-        <a href="{% url 'register' %}" class="text-black font-semibold bg-white px-3 py-1 rounded hover:bg-primary hover:text-black transition">Sign Up</a>
+        <a href="{% url 'home' %}" class="text-white hover:text-yellow-400">Home</a>
+        <a href="" class="text-white hover:text-yellow-400">Logout</a>
       </div>
     </div>
   </nav>
-  <div class="max-w-4xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-black mb-6">Profile</h1>
-    <!-- Profile details will go here -->
+
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Profile Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome, {{ user.username }}</h1>
+        <p class="text-gray-600">Role: <span class="font-semibold">{{ user.role }}</span></p>
+        <p class="text-gray-600">Email: <span class="font-semibold">{{ user.email }}</span></p>
+        <p class="text-gray-600">Phone: <span class="font-semibold">{{ user.phone }}</span></p>
+      </div>
+      <div class="mt-4 md:mt-0">
+        <a href="{% url 'add_property' %}" class="inline-block px-6 py-2 bg-yellow-400 text-black font-semibold rounded hover:bg-yellow-500 transition">+ Add Property</a>
+      </div>
+    </div>
+
+    <!-- Property Selection Section -->
+    <div class="bg-white rounded-lg shadow p-6 mb-10">
+      <h2 class="text-xl font-bold mb-4">Select a Property</h2>
+      {% if properties %}
+        <form method="get" action="{% url 'property_detail' 0 %}" onsubmit="event.preventDefault(); if(this.property.value){window.location.href=this.action.replace('0', this.property.value);}">
+          <label for="property" class="block mb-2 text-gray-700">Choose from your properties:</label>
+          <select name="property" id="property" class="w-full p-2 border rounded mb-4">
+            <option value="">-- Select Property --</option>
+            {% for property in properties %}
+              <option value="{{ property.id }}">{{ property.name }} ({{ property.location }})</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="px-4 py-2 bg-yellow-400 text-black font-semibold rounded hover:bg-yellow-500 transition">View Property</button>
+        </form>
+      {% else %}
+        <p class="text-gray-500">You have no properties yet. <a href="{% url 'add_property' %}" class="text-yellow-500 hover:underline">Add one now</a>.</p>
+      {% endif %}
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+      <div class="bg-white rounded-lg shadow p-6 text-center">
+        <div class="text-3xl text-yellow-500 mb-2"><i class="ph ph-buildings"></i></div>
+        <div class="text-3xl font-extrabold">{{ properties.count }}</div>
+        <div class="text-gray-600 mt-1">Total Properties</div>
+      </div>
+      <div class="bg-white rounded-lg shadow p-6 text-center">
+        <div class="text-3xl text-green-500 mb-2"><i class="ph ph-users-three"></i></div>
+        <div class="text-3xl font-extrabold">{{ total_tenants }}</div>
+        <div class="text-gray-600 mt-1">Total Tenants</div>
+      </div>
+      <div class="bg-white rounded-lg shadow p-6 text-center">
+        <div class="text-3xl text-blue-500 mb-2"><i class="ph ph-door-open"></i></div>
+        <div class="text-3xl font-extrabold">{{ vacant_units }}</div>
+        <div class="text-gray-600 mt-1">Vacant Units</div>
+      </div>
+      <div class="bg-white rounded-lg shadow p-6 text-center">
+        <div class="text-3xl text-red-500 mb-2"><i class="ph ph-wrench"></i></div>
+        <div class="text-3xl font-extrabold">{{ maintenance_requests }}</div>
+        <div class="text-gray-600 mt-1">Open Maintenance</div>
+      </div>
+    </div>
+
+    <!-- Rent Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      <div class="bg-white rounded-lg shadow p-6 text-center">
+        <div class="text-3xl text-green-600 mb-2"><i class="ph ph-currency-circle-dollar"></i></div>
+        <div class="text-3xl font-extrabold">{{ rent_paid }}</div>
+        <div class="text-gray-600 mt-1">Total Rent Paid</div>
+      </div>
+      <div class="bg-white rounded-lg shadow p-6 text-center">
+        <div class="text-3xl text-red-600 mb-2"><i class="ph ph-currency-circle-dollar"></i></div>
+        <div class="text-3xl font-extrabold">{{ rent_unpaid }}</div>
+        <div class="text-gray-600 mt-1">Total Rent Unpaid</div>
+      </div>
+    </div>
+
+    <!-- Properties Table -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-bold mb-4">Your Properties</h2>
+      {% if properties %}
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left">
+          <thead>
+            <tr>
+              <th class="py-2 px-4 border-b">Name</th>
+              <th class="py-2 px-4 border-b">Location</th>
+              <th class="py-2 px-4 border-b">Units</th>
+              <th class="py-2 px-4 border-b">Vacant</th>
+              <th class="py-2 px-4 border-b">Tenants</th>
+              <th class="py-2 px-4 border-b">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for property in properties %}
+            <tr>
+              <td class="py-2 px-4 border-b">{{ property.name }}</td>
+              <td class="py-2 px-4 border-b">{{ property.location }}</td>
+              <td class="py-2 px-4 border-b">{{ property.unit_count }}</td>
+              <td class="py-2 px-4 border-b">{{ property.vacant_units }}</td>
+              <td class="py-2 px-4 border-b">{{ property.tenants.count }}</td>
+              <td class="py-2 px-4 border-b">
+                <a href="{% url 'property_detail' property.id %}" class="text-blue-600 hover:underline">View</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+        <p class="text-gray-500">You have no properties yet. <a href="{% url 'add_property' %}" class="text-yellow-500 hover:underline">Add one now</a>.</p>
+      {% endif %}
+    </div>
   </div>
-  <script src="{% static 'js/main.js' %}"></script>
+  <!-- Phosphor Icons CDN -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </body>
 </html>

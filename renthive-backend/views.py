@@ -5,6 +5,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from user.models import User
 from properties.models import Property, ProofOfOwnership
+import os
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -70,33 +72,46 @@ def login_view(request):
             messages.error(request, "Invalid username or password.")
     return render(request, 'login.html')
 
+from google.cloud import vision
+
 @login_required
 def proof_of_ownership_view(request):
     if request.method == 'POST':
         document = request.FILES.get('ownership_proof')
         description = request.POST.get('description', '')
+
+        if not document:
+            messages.error(request, "No file uploaded.")
+            return redirect('proof_of_ownership')
+
         ProofOfOwnership.objects.create(
             user=request.user,
             document=document,
             description=description,
             status='Pending Verification'
         )
-        messages.success(request, "Proof submitted. Pending verification.")
-        return redirect('dashboard')
+        messages.success(request, "Proof of ownership submitted and is pending manual verification.")
+        return redirect('profile')  # Redirect to profile after upload
+
     return render(request, 'proof_of_ownership.html')
+
 
 @login_required
 def dashboard_view(request):
     properties = None
+    proof = None
     if request.user.role == 'OWNER':
         proof = ProofOfOwnership.objects.filter(user=request.user).order_by('-id').first()
         if not proof or proof.status != 'Verified':
             return redirect('proof_of_ownership')
         properties = Property.objects.filter(owner=request.user)
     elif request.user.role == 'TENANT':
-        # You can customize tenant dashboard logic here
+        # Customize tenant dashboard logic here
         pass
-    return render(request, 'dashboard.html', {'properties': properties})
+    return render(request, 'dashboard.html', {
+        'properties': properties,
+        'proof': proof,
+    })
 
 @login_required
 def add_property_view(request):
@@ -155,3 +170,6 @@ def notifications_view(request):
 @login_required
 def profile_view(request):
     return render(request, 'profile.html')
+
+import os
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials/renthive-7d89d-dd7446695ef6.json"
